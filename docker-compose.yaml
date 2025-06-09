@@ -8,8 +8,8 @@ services:
       DATABASE_NAME: "BusinessHost"
       API_ENVIRONMENT: "LOCAL"
     volumes:
-      - ./dacpac/Edrington.BuinsessService.Database.dacpac:/tmp/your-dacpac-file.dacpac
-      - ./EmptyDatabase/entrypoint.sh:/tmp/entrypoint.sh
+      - ./Databases/Edrington.BuinsessService.Database.dacpac:/tmp/your-dacpac-file.dacpac
+      - ./Databases/entrypoint.sh:/tmp/entrypoint.sh
     command: /tmp/entrypoint.sh
 
   consumerapidatabase:
@@ -21,7 +21,7 @@ services:
       DATABASE_NAME: "GatewayApi"
       API_ENVIRONMENT: "LOCAL"
     volumes:
-      - ./dacpac/Edrington.Api.Database.dacpac:/tmp/your-dacpac-file.dacpac
-      - ./EmptyDatabase/entrypoint.sh:/tmp/entrypoint.sh
+      - ./Databases/Edrington.Api.Database.dacpac:/tmp/your-dacpac-file.dacpac
+      - ./Databases/entrypoint.sh:/tmp/entrypoint.sh
     command: /tmp/entrypoint.sh
     
