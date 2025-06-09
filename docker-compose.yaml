@@ -4,26 +4,24 @@ services:
     ports:
       - "8010:1433"  
     environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "YourStrong!Passw0rd"
+      SA_PASSWORD: "BusinessHost!Passw0rd"
       DATABASE_NAME: "BusinessHost"
       API_ENVIRONMENT: "LOCAL"
     volumes:
-      - ./BusinessHostDatabase/Edrington.BuinsessService.Database.dacpac:/tmp/your-dacpac-file.dacpac
+      - ./dacpac/Edrington.BuinsessService.Database.dacpac:/tmp/your-dacpac-file.dacpac
       - ./EmptyDatabase/entrypoint.sh:/tmp/entrypoint.sh
-    command: /bin/bash /tmp/entrypoint.sh
+    command: /tmp/entrypoint.sh
 
   consumerapidatabase:
     image: sqlserver-with-tools
     ports:
       - "8020:1433"
     environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "YourStrong!Passw0rd"
+      SA_PASSWORD: "GatewayApi!Passw0rd"
       DATABASE_NAME: "GatewayApi"
       API_ENVIRONMENT: "LOCAL"
     volumes:
-      - ./ConsumerApiDatabase/Edrington.Api.Database.dacpac:/tmp/your-dacpac-file.dacpac
+      - ./dacpac/Edrington.Api.Database.dacpac:/tmp/your-dacpac-file.dacpac
       - ./EmptyDatabase/entrypoint.sh:/tmp/entrypoint.sh
-    command: /bin/bash /tmp/entrypoint.sh
+    command: /tmp/entrypoint.sh
     

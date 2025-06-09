@@ -29,7 +29,7 @@ sqlpackage \
   /TargetTrustServerCertificate:True \
   /Variables:"Environment=$API_ENVIRONMENT"
 
-echo "DACPAC deployment completed."
+echo "***** $DATABASE_NAME is now ready! *****"
 
 # Wait for SQL Server to exit
 wait
