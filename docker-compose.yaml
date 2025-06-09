@@ -1,0 +1,24 @@
+
+services:
+  businesshostdatabase:
+    build:
+      context: ./BusinessHostDatabase
+      dockerfile: Dockerfile
+    ports:
+      - "8010:1433"  
+    #volumes:
+    #  - ./compose:/app       # Optional: mount current directory
+    environment:
+      - NODE_ENV=development  # Example env variable
+
+  consumerapidatabase:
+    build:
+      context: ./ConsumerApiDatabase
+      dockerfile: Dockerfile
+    ports:
+      - "8020:1433"  
+    #volumes:
+    #  - ./compose:/app       # Optional: mount current directory
+    environment:
+      - NODE_ENV=development  # Example env variable
+
