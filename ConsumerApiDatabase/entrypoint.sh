@@ -17,13 +17,13 @@ for i in {1..60}; do
 done
 
 # Deploy the DACPAC
-echo "Deploying DACPAC to BusinessHost database..."
+echo "Deploying DACPAC to ConsumerApi database..."
 
 sqlpackage \
   /Action:Publish \
   /SourceFile:/tmp/your-dacpac-file.dacpac \
   /TargetServerName:localhost \
-  /TargetDatabaseName:BusinessHost \
+  /TargetDatabaseName:GatewayApi \
   /TargetUser:sa \
   /TargetPassword:YourStrong!Passw0rd \
   /TargetTrustServerCertificate:True
