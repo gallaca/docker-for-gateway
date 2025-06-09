@@ -1,24 +1,29 @@
-
 services:
   businesshostdatabase:
-    build:
-      context: ./BusinessHostDatabase
-      dockerfile: Dockerfile
+    image: sqlserver-with-tools
     ports:
       - "8010:1433"  
-    #volumes:
-    #  - ./compose:/app       # Optional: mount current directory
     environment:
-      - NODE_ENV=development  # Example env variable
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      DATABASE_NAME: "BusinessHost"
+      API_ENVIRONMENT: "LOCAL"
+    volumes:
+      - ./BusinessHostDatabase/Edrington.BuinsessService.Database.dacpac:/tmp/your-dacpac-file.dacpac
+      - ./EmptyDatabase/entrypoint.sh:/tmp/entrypoint.sh
+    command: /bin/bash /tmp/entrypoint.sh
 
   consumerapidatabase:
-    build:
-      context: ./ConsumerApiDatabase
-      dockerfile: Dockerfile
+    image: sqlserver-with-tools
     ports:
-      - "8020:1433"  
-    #volumes:
-    #  - ./compose:/app       # Optional: mount current directory
+      - "8020:1433"
     environment:
-      - NODE_ENV=development  # Example env variable
-
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      DATABASE_NAME: "GatewayApi"
+      API_ENVIRONMENT: "LOCAL"
+    volumes:
+      - ./ConsumerApiDatabase/Edrington.Api.Database.dacpac:/tmp/your-dacpac-file.dacpac
+      - ./EmptyDatabase/entrypoint.sh:/tmp/entrypoint.sh
+    command: /bin/bash /tmp/entrypoint.sh
+    

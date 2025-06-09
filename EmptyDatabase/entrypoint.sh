@@ -4,12 +4,12 @@
 /opt/mssql/bin/sqlservr &
 
 # Wait for SQL Server to be ready
-echo "Waiting for SQL Server to start..."
+echo "$DATABASE_NAME - Waiting for SQL Server to start..."
 sleep 10
 for i in {1..60}; do
-  sqlcmd -S localhost -U sa -P '$SA_PASSWORD' -Q "SELECT 1" > /dev/null 2>&1
+  sqlcmd -S localhost -U sa -P "$SA_PASSWORD" -Q "SELECT 1" > /dev/null 2>&1
   if [ $? -eq 0 ]; then
-    echo "SQL Server is ready!"
+    echo "$DATABASE_NAME - SQL Server is ready!"
     break
   fi
   echo "still waiting..."
@@ -26,7 +26,8 @@ sqlpackage \
   /TargetDatabaseName:$DATABASE_NAME \
   /TargetUser:sa \
   /TargetPassword:$SA_PASSWORD \
-  /TargetTrustServerCertificate:True
+  /TargetTrustServerCertificate:True \
+  /Variables:"Environment=$API_ENVIRONMENT"
 
 echo "DACPAC deployment completed."
 

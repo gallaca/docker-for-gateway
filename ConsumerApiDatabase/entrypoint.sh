@@ -7,7 +7,7 @@
 echo "Waiting for SQL Server to start..."
 sleep 10
 for i in {1..60}; do
-  sqlcmd -S localhost -U sa -P 'YourStrong!Passw0rd' -Q "SELECT 1" > /dev/null 2>&1
+  sqlcmd -S localhost -U sa -P '$SA_PASSWORD' -Q "SELECT 1" > /dev/null 2>&1
   if [ $? -eq 0 ]; then
     echo "SQL Server is ready!"
     break
@@ -17,15 +17,15 @@ for i in {1..60}; do
 done
 
 # Deploy the DACPAC
-echo "Deploying DACPAC to ConsumerApi database..."
+echo "Deploying DACPAC to $DATABASE_NAME database..."
 
 sqlpackage \
   /Action:Publish \
   /SourceFile:/tmp/your-dacpac-file.dacpac \
   /TargetServerName:localhost \
-  /TargetDatabaseName:GatewayApi \
+  /TargetDatabaseName:$DATABASE_NAME \
   /TargetUser:sa \
-  /TargetPassword:YourStrong!Passw0rd \
+  /TargetPassword:$SA_PASSWORD \
   /TargetTrustServerCertificate:True
 
 echo "DACPAC deployment completed."
