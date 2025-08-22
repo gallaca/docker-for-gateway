@@ -25,7 +25,7 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor 
   && ln -s /opt/mssql-tools/bin/sqlcmd /usr/bin/sqlcmd \
   && rm microsoft.gpg
 
-  # Download and install sqlpackage
+# Download and install sqlpackage
 RUN wget -O sqlpackage.zip https://aka.ms/sqlpackage-linux \
   && unzip sqlpackage.zip -d /opt/sqlpackage \
   && chmod +x /opt/sqlpackage/sqlpackage \

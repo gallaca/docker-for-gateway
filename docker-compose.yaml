@@ -25,3 +25,20 @@ services:
       - ./Databases/entrypoint.sh:/tmp/entrypoint.sh
     command: /tmp/entrypoint.sh
     
+  consumerapi:
+    image: consumer-api
+    ports:
+      - "5000:5000"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    volumes:
+      - ~/.azure-for-docker:/root/.azure
+
+  consumerhooksapi:
+    image: consumer-hooks-api
+    ports:
+      - "5001:5001"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    volumes:
+      - ~/.azure-for-docker:/root/.azure

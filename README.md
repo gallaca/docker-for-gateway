@@ -1,5 +1,9 @@
 # docker-for-gateway
 
+```
+docker build -t sqlserver-with-tools . 
+```
+
 
 ## TODO
 
