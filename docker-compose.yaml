@@ -11,6 +11,14 @@ services:
       - ./Databases/Edrington.BuinsessService.Database.dacpac:/tmp/your-dacpac-file.dacpac
       - ./Databases/entrypoint.sh:/tmp/entrypoint.sh
     command: /tmp/entrypoint.sh
+    networks:
+      - gateway
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -d BusinessHost -U sa -P BusinessHost!Passw0rd -Q 'SELECT 1' -b -o /dev/null"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 20s
 
   consumerapidatabase:
     image: sqlserver-with-tools
@@ -24,15 +32,33 @@ services:
       - ./Databases/Edrington.Api.Database.dacpac:/tmp/your-dacpac-file.dacpac
       - ./Databases/entrypoint.sh:/tmp/entrypoint.sh
     command: /tmp/entrypoint.sh
-    
+    networks:
+      - gateway
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -d GatewayApi -U sa -P GatewayApi!Passw0rd -Q 'SELECT 1' -b -o /dev/null"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
   consumerapi:
     image: consumer-api
     ports:
       - "5000:5000"
     environment:
-      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_ENVIRONMENT: "Development"  
+      EDRINGTON__ALL__BUSINESSDATABASECONNECTIONSTRING: "Server=businesshostdatabase;Database=BusinessHost;User Id=sa;Password=BusinessHost!Passw0rd;TrustServerCertificate=true;ConnectRetryCount=3;ConnectRetryInterval=10;"
+      EDRINGTON__ALL__APIDATABASECONNECTIONSTRING: "Server=consumerapidatabase;Database=GatewayApi;User Id=sa;Password=GatewayApi!Passw0rd;TrustServerCertificate=true;ConnectRetryCount=3;ConnectRetryInterval=10;"
     volumes:
       - ~/.azure-for-docker:/root/.azure
+      # - ./wait-for-it.sh:/tmp/wait-for-it.sh
+    depends_on:
+      businesshostdatabase:
+        condition: service_healthy
+      consumerapidatabase:
+        condition: service_healthy
+    networks:
+      - gateway
 
   consumerhooksapi:
     image: consumer-hooks-api
@@ -40,5 +66,19 @@ services:
       - "5001:5001"
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
+      EDRINGTON__ALL__BUSINESSDATABASECONNECTIONSTRING: "Server=businesshostdatabase;Database=BusinessHost;User Id=sa;Password=BusinessHost!Passw0rd;TrustServerCertificate=true;ConnectRetryCount=3;ConnectRetryInterval=10;"
+      EDRINGTON__ALL__APIDATABASECONNECTIONSTRING: "Server=consumerapidatabase;Database=GatewayApi;User Id=sa;Password=GatewayApi!Passw0rd;TrustServerCertificate=true;ConnectRetryCount=3;ConnectRetryInterval=10;"
     volumes:
       - ~/.azure-for-docker:/root/.azure
+      # - ./wait-for-it.sh:/tmp/wait-for-it.sh
+    depends_on:
+      businesshostdatabase:
+        condition: service_healthy
+      consumerapidatabase:
+        condition: service_healthy
+    networks:
+      - gateway
+      
+networks:
+  gateway:
+    driver: bridge
